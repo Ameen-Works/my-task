@@ -52,7 +52,7 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
   const handleEditTask = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3001/task/edit/${taskId}`,
+        `https://my-tasks-ie4s.onrender.com/task/edit/${taskId}`,
         {
           method: "PUT",
           headers: {

@@ -17,7 +17,7 @@ const Login = ({ onLogin, onRegisterClick }) => {
   const handleLogin = async () => {
     try {
       // Make a POST request to your backend API
-      const response = await fetch("http://localhost:3001/user/login", {
+      const response = await fetch("https://my-tasks-ie4s.onrender.com/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -17,7 +17,7 @@ const App = () => {
     const fetchTasks = async () => {
       if (user) {
         try {
-          const response = await fetch("http://localhost:3001/task/all-tasks", {
+          const response = await fetch("https://my-tasks-ie4s.onrender.com/task/all-tasks", {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },

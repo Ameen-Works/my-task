@@ -11,7 +11,7 @@ const AddTask = ({ onAdd, logInUser }) => {
 
   const handleAddTask = async () => {
     try {
-      const response = await fetch("http://localhost:3001/task/add-task", {
+      const response = await fetch("https://my-tasks-ie4s.onrender.com/task/add-task", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${logInUser.token}`,

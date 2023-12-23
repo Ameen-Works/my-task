@@ -19,7 +19,7 @@ const TaskList = ({
     try {
       console.log("Completion Status", completion);
       const response = await fetch(
-        `http://localhost:3001/task/update-complete/${taskId}`,
+        `https://my-tasks-ie4s.onrender.com/task/update-complete/${taskId}`,
         {
           method: "PATCH",
           headers: {
@@ -49,7 +49,7 @@ const TaskList = ({
   const onDeleteClick = async (taskId) => {
     try {
       const response = await fetch(
-        `http://localhost:3001/task/delete/${taskId}`,
+        `https://my-tasks-ie4s.onrender.com/task/delete/${taskId}`,
         {
           method: "DELETE",
           headers: {

@@ -53,3 +53,12 @@
     color: blue;
     cursor: pointer;
 }
+
+.error-message {
+    color: #ff0000;
+    /* Red color for the error message */
+    font-size: 14px;
+    /* Font size of the error message */
+    margin-top: 5px;
+    /* Add some space at the top of the error message */
+}

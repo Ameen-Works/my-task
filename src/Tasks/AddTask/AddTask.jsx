@@ -2,23 +2,31 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddTask.css";
+import LoadingSpinner from "../../Loader/Loading";
 
 const AddTask = ({ onAdd, logInUser }) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
   const navigateTo = useNavigate();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // New loading state
 
   const handleAddTask = async () => {
+    setError(null);
+    setLoading(true);
     try {
-      const response = await fetch("https://my-tasks-ie4s.onrender.com/task/add-task", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${logInUser.token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ title, description, deadline }),
-      });
+      const response = await fetch(
+        "https://my-tasks-ie4s.onrender.com/task/add-task",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${logInUser.token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ title, description, deadline }),
+        }
+      );
 
       if (response.ok) {
         const newTask = await response.json();
@@ -27,13 +35,18 @@ const AddTask = ({ onAdd, logInUser }) => {
           deadline: formatDate(newTask.deadline),
         };
         onAdd(formattedNewTask);
+        alert("Task added successfully.... Notification sent!");
         navigateTo("/tasks");
       } else {
         // Handle error
         console.error("Error adding task:", response.statusText);
+        setError("Error adding task:", response.statusText);
       }
     } catch (error) {
       console.error("Error adding task:", error);
+      setError("Error adding task:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const formatDateString = (dateString) => {
@@ -50,11 +63,13 @@ const AddTask = ({ onAdd, logInUser }) => {
   };
   return (
     <div className="add-task-container">
+      {loading && <LoadingSpinner />}
       <h2 className="add-task-title">Add New Task</h2>
       <label className="form-label">
         Title:
         <input
           className="form-input"
+          required
           type="text"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -64,6 +79,7 @@ const AddTask = ({ onAdd, logInUser }) => {
       <label className="form-label">
         Description:
         <textarea
+          required
           className="textarea-input"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -73,6 +89,7 @@ const AddTask = ({ onAdd, logInUser }) => {
       <label className="form-label">
         Deadline:
         <input
+          required
           className="date-input"
           type="date"
           value={deadline}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import "./EditTask.css";
+import LoadingSpinner from "../../Loader/Loading";
 
 const EditTask = ({ tasks, onEdit, logInUser }) => {
   const navigateTo = useNavigate();
   const { taskId } = useParams();
-
+  const [loading, setLoading] = useState(false); // New loading state
+  const [error, setError] = useState(null);
   //   const currTask = tasks.filter((task) => task._id === taskId);
   // Local state for the edited task
   const [editedTask, setEditedTask] = useState({});
@@ -50,6 +52,8 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
   //   }, [taskId, navigateTo, tasks]);
 
   const handleEditTask = async () => {
+    setError(null);
+    setLoading(true);
     try {
       const response = await fetch(
         `https://my-tasks-ie4s.onrender.com/task/edit/${taskId}`,
@@ -75,12 +79,17 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
           deadline: formatDate(updatedTask.task.deadline),
         };
         onEdit(formattedNewTask); // Update the state with the edited task
+        alert("Notification sent with updated task details!");
         navigateTo("/tasks"); // Navigate back to the tasks page after editing
       } else {
         console.error("Error editing task:", response.statusText);
+        setError("Error editing task:", response.statusText);
       }
     } catch (error) {
       console.error("Error editing task:", error);
+      setError("Error editing task:", error);
+    } finally {
+      setLoading(false);
     }
   };
   const formatDateString = (dateString) => {
@@ -97,11 +106,13 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
   };
   return (
     <div className="edit-task-container">
-      {console.log(taskId)}
+      {loading && <LoadingSpinner />}
+
       <h2 className="edit-task-title">Edit Task</h2>
       <label className="form-label">
         Title:
         <input
+          required
           type="text"
           className="form-input"
           value={editedTask.title}
@@ -114,6 +125,7 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
       <label className="form-label">
         Description:
         <textarea
+          required
           className="textarea-input"
           value={editedTask.description}
           onChange={(e) =>
@@ -125,6 +137,7 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
       <label className="form-label">
         Deadline:
         <input
+          required
           className="date-input"
           type="date"
           value={editedTask.deadline}
@@ -134,6 +147,7 @@ const EditTask = ({ tasks, onEdit, logInUser }) => {
         />
       </label>
       <br />
+      {error && <p className="error-message">{error}</p>}
       <button className="edit-button" onClick={handleEditTask}>
         Save Changes
       </button>

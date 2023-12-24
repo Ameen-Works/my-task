@@ -76,8 +76,8 @@
   grid-column: span 1;
   /* Make the button span two columns */
   background-color: #2196f3;
-  height: max-content;
-  width: auto;
+  /* height: max-content; */
+  max-width: 300px;
   /* Blue button color */
   color: #fff;
   /* White text color */

@@ -47,27 +47,33 @@ const TaskList = ({
   };
 
   const onDeleteClick = async (taskId) => {
-    try {
-      const response = await fetch(
-        `https://my-tasks-ie4s.onrender.com/task/delete/${taskId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${logInUser.token}`,
-          },
-        }
-      );
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this task?"
+    );
 
-      if (response.ok) {
-        // If the request is successful, you can update the state or perform any other necessary actions
-        handleDelete(taskId); // Update the state to remove the deleted task
-        navigateTo("/tasks");
-      } else {
-        // Handle error
-        console.error("Error deleting task:", response.statusText);
+    if (userConfirmed) {
+      try {
+        const response = await fetch(
+          `https://my-tasks-ie4s.onrender.com/task/delete/${taskId}`,
+          {
+            method: "DELETE",
+            headers: {
+              Authorization: `Bearer ${logInUser.token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          // User clicked "OK" in the confirmation dialog
+          handleDelete(taskId); // Update the state to remove the deleted task
+          navigateTo("/tasks");
+        } else {
+          // Handle error
+          console.error("Error deleting task:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error deleting task:", error);
       }
-    } catch (error) {
-      console.error("Error deleting task:", error);
     }
   };
   const formatDate = (dateString) => {
@@ -81,7 +87,11 @@ const TaskList = ({
 
   return (
     <div className="">
-      Hi {logInUser.username},
+      Hi {logInUser.username},<br />
+      {`Welcome to the my tasks list powered by Ameen-Works app.`}
+      <br />
+      {`You can enjoy our services include daily follow-up emails and activity notification emails.`}
+      <br />
       <button
         onClick={() => navigateTo("/add-task")}
         className="add-task-button"
